@@ -1,0 +1,19 @@
+<${state.component} data=state.data  />
+
+import history from '../../history'
+import routes from '../../routes'
+
+class {
+  onCreate({ page, data }) {
+    this.state = {
+      component: require(`../${page || 'test'}/index.marko`),
+      data,
+    }
+    history.listen(this.handle.bind(this))
+  }
+  async handle({location}) {
+    const route = await routes.resolve(location);
+    this.state.data = route.data;
+    this.state.component = require(`../${route.page || 'test'}/index.marko`);
+  }  
+}

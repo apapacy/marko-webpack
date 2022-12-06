@@ -1,0 +1,11 @@
+import history from '../../history'
+
+<a on-click("handleClick") href=input.href><${input.renderBody}/></a>
+
+class {
+  handleClick(e) {
+    alert('route')
+    e.preventDefault()
+    history.navigate(this.input.href)
+  }
+}
