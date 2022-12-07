@@ -1,7 +1,8 @@
 <${state.component} data=state.data  />
 
-import history from '../../history'
-import routes from '../../routes'
+import history from '../../history';
+import routes from '../../routes';
+import store from '../../store';
 
 class {
   onCreate({ page, data }) {
@@ -9,11 +10,17 @@ class {
       component: require(`../${page || 'test'}/index.marko`),
       data,
     }
-    history.listen(this.handle.bind(this))
+    history.listen(this.handle.bind(this));
   }
   async handle({location}) {
     const route = await routes.resolve(location);
     this.state.data = route.data;
     this.state.component = require(`../${route.page || 'test'}/index.marko`);
-  }  
+  }
+  onMount() {
+    store.subscribe(() => {
+      this.forceUpdate();
+    });
+  }
+
 }

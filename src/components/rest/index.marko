@@ -1,7 +1,22 @@
+import store from '../../store';
+
 style {
   div {
     color: green;
   }
 }
 
-<div>rest component</div>
+<div on-click('onClick')>rest component ${store.getState().value} OK </div>
+
+class {
+  onClick() {
+    store.dispatch({ type: 'INCREMENT' });
+  }
+  onMount() {
+    store.subscribe(() => {
+      this.forceUpdate();
+    });
+  }
+}
+
+
