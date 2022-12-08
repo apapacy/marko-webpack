@@ -1,15 +1,19 @@
-<${state.component} data=state.data  />
+<${state.component} data=state.data store=state.store />
 
 import history from '../../history';
 import routes from '../../routes';
-import store from '../../store';
+import getStore from '../../store';
 
 class {
   onCreate({ page, data }) {
     this.state = {
       component: require(`../${page || 'test'}/index.marko`),
       data,
+      store: getStore(),
     }
+    this.state.store.subscribe(() => {
+      // this.forceUpdate();
+    });
     history.listen(this.handle.bind(this));
   }
   async handle({location}) {
@@ -17,10 +21,4 @@ class {
     this.state.data = route.data;
     this.state.component = require(`../${route.page || 'test'}/index.marko`);
   }
-  onMount() {
-    store.subscribe(() => {
-      this.forceUpdate();
-    });
-  }
-
 }

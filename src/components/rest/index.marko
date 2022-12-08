@@ -6,16 +6,23 @@ style {
   }
 }
 
-<div on-click('onClick')>rest component ${store.getState().value} OK </div>
+<div on-click('onClick')>rest component ${state.value} OK </div>
 
 class {
   onClick() {
-    store.dispatch({ type: 'INCREMENT' });
+    this.state.store.dispatch({ type: 'INCREMENT' });
   }
-  onMount() {
-    store.subscribe(() => {
-      this.forceUpdate();
-    });
+  onCreate(input) {
+    console.log('*****************', arguments);
+    this.state = {
+      store: input.store,
+      ...input.store.getState()
+    }
+    this.state.store.subscribe((() => {
+      console.log('updated', this.state.store.getState())
+      Object.assign(this.state, this.state.store.getState())
+      // this.forceUpdate();
+    }).bind(this));
   }
 }
 
