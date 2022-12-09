@@ -18,12 +18,16 @@ class {
       store: input.store,
       ...input.store.getState()
     }
-    this.state.store.subscribe((() => {
+    this.unsubscribe = this.state.store.subscribe((() => {
       console.log('updated', this.state.store.getState())
       Object.assign(this.state, this.state.store.getState())
       // this.forceUpdate();
     }).bind(this));
   }
+  onDestroy() {
+    this.unsubscribe();
+  }
+
 }
 
 
